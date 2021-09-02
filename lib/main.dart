@@ -2,58 +2,51 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(new MaterialApp(
-    title: "Card & Parsing",
+    title: "Navigasi",
     home: new HalHallo(),
+    routes: <String, WidgetBuilder>{
+      '/HalHallo' : (BuildContext context) => new HalHallo(),
+      '/HalDua' : (BuildContext context) => new HalDua(),
+    },
   ));
 }
 
 class HalHallo extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Card & Parsing"),
-      ),
-      body: new Container(
-        padding: new EdgeInsets.all(10.0),
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            new CardSaya(icon: Icons.home, teks: "home", warna: Colors.brown,),
-            new CardSaya(icon: Icons.favorite, teks: "favorite", warna: Colors.pink,),
-            new CardSaya(icon: Icons.place, teks: "Place", warna: Colors.blue,),
-            new CardSaya(icon: Icons.settings, teks: "Setting", warna: Colors.black,),
-            
-          ],
+        appBar: new AppBar(
+          title: new Text("Music"),
         ),
-      ),
-    );
+        body: new Center(
+          child: new IconButton(
+              icon: new Icon(
+                Icons.headset,
+                size: 50.0,
+              ),
+              onPressed: (){
+                Navigator.pushNamed(context, '/HalDua');
+              }),
+        ));
   }
 }
 
-class CardSaya extends StatelessWidget {
-  CardSaya({this.icon, this.teks, this.warna});
-  final IconData icon;
-  final String teks;
-  final Color warna;
+class HalDua extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      child: new Card(
-          child: new Column(
-        children: <Widget>[
-          new Icon(
-            icon,
-            size: 50.0,
-            color: warna,
-          ),
-          new Text(
-            teks,
-            style: new TextStyle(fontSize: 20.0),
-          )
-        ],
-      )),
-    );
+    return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Speaker"),
+        ),
+        body: new Center(
+          child: new IconButton(
+              icon: new Icon(
+                Icons.speaker,
+                size: 50.0,
+              ),
+              onPressed: (){
+                Navigator.pushNamed(context, '/HalHallo');
+              }),
+        ));
   }
 }
