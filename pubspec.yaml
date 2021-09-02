@@ -51,6 +51,14 @@ flutter:
     - img/komputer.png
     - img/radio.png
     - img/smartphone.jpg
+    - img/n1.jpg
+    - img/n2.jpg
+    - img/n3.jpeg
+    - img/n4.jpg
+    - img/n5.jpg
+    - img/n6.jpg
+    - img/n7.jpg
+    - img/n8.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
