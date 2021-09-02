@@ -2,55 +2,58 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(new MaterialApp(
-    title: "ini title",
+    title: "Card & Parsing",
     home: new HalHallo(),
   ));
 }
 
 class HalHallo extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        backgroundColor: Colors.yellow[200],
-        appBar: new AppBar(
-          backgroundColor: Colors.red[400],
-          leading: new Icon(Icons.home),
-          title: new Center(
-            child: new Text("Home"),
-          ),
-          actions: <Widget>[new Icon(Icons.search)],
-        ),
-        body: new Container(
-            child: new Column(
+      appBar: new AppBar(
+        title: new Text("Card & Parsing"),
+      ),
+      body: new Container(
+        padding: new EdgeInsets.all(10.0),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            new Icon(
-              Icons.local_pizza,
-              size: 70.0,
-              color: Colors.red,
-            ),
-            new Row(children: <Widget>[
-              new Icon(
-                Icons.local_pizza,
-                size: 70.0,
-                color: Colors.red,
-              ),
-              new Icon(
-                Icons.local_pizza,
-                size: 70.0,
-                color: Colors.red,
-              ),
-              new Icon(
-                Icons.local_pizza,
-                size: 70.0,
-                color: Colors.red,
-              ),
-            ]),
-            new Icon(
-              Icons.cake,
-              size: 70.0,
-              color: Colors.red,
-            )
+            new CardSaya(icon: Icons.home, teks: "home", warna: Colors.brown,),
+            new CardSaya(icon: Icons.favorite, teks: "favorite", warna: Colors.pink,),
+            new CardSaya(icon: Icons.place, teks: "Place", warna: Colors.blue,),
+            new CardSaya(icon: Icons.settings, teks: "Setting", warna: Colors.black,),
+            
           ],
-        )));
+        ),
+      ),
+    );
+  }
+}
+
+class CardSaya extends StatelessWidget {
+  CardSaya({this.icon, this.teks, this.warna});
+  final IconData icon;
+  final String teks;
+  final Color warna;
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      child: new Card(
+          child: new Column(
+        children: <Widget>[
+          new Icon(
+            icon,
+            size: 50.0,
+            color: warna,
+          ),
+          new Text(
+            teks,
+            style: new TextStyle(fontSize: 20.0),
+          )
+        ],
+      )),
+    );
   }
 }
