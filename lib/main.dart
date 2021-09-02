@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(new MaterialApp(
     title: "List View",
-    home: new HalHallo(),
+    home: new HalHallo(data: new List<String>.generate(300, (index) => "ini data ke $index"),),
   ));
 }
 
 class HalHallo extends StatelessWidget {
+  final List<String> data;
+  HalHallo({this.data});
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -15,30 +18,17 @@ class HalHallo extends StatelessWidget {
         backgroundColor: Colors.amber[900],
         title: new Text("Listview"),
       ),
-      body: new ListView(
-        children: <Widget>[
-          new ListAlat(
-            gambar:
-                "https://w7.pngwing.com/pngs/346/79/png-transparent-internet-radio-computer-icons-radio-electronics-fm-broadcasting-radio-station-thumbnail.png",
-            judul: "RADIO",
-          ),
-          new ListAlat(
-            gambar:
-                "https://png.pngtree.com/element_our/20190602/ourmid/pngtree-hand-drawn-smartphone-illustration-image_1401996.jpg",
-            judul: "SMARTPHONE",
-          ),
-          new ListAlat(
-            gambar:
-                "https://png.pngtree.com/element_our/20190602/ourmid/pngtree-hand-drawn-smartphone-illustration-image_1401996.jpg",
-            judul: "SMARTPHONE",
-          ),
-          new ListAlat(
-            gambar:
-                "https://png.pngtree.com/element_our/20190602/ourmid/pngtree-hand-drawn-smartphone-illustration-image_1401996.jpg",
-            judul: "SMARTPHONE",
-          ),
-        ],
-      ),
+      body: new Container(
+        child: new ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (context, index){
+            return new ListTile(
+              leading: new Icon(Icons.widgets),
+              title: new Text("${data[index]}"),
+            );
+          },
+        ),
+      )
     );
   }
 }
