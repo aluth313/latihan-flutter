@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
 
 void main() {
   runApp(new MaterialApp(
@@ -16,50 +13,82 @@ class HalHallo extends StatefulWidget {
 }
 
 class _HalHalloState extends State<HalHallo> {
-  List dataJSON;
-  Future<String> ambilData() async {
-    http.Response hasil = await http.get(
-        Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
-        headers: {"Accept": "application/json"});
+  String teks = "";
+  final GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
-    this.setState(() {
-      dataJSON = json.decode(hasil.body);
-    });
+  TextEditingController controller = new TextEditingController();
+  TextEditingController controllerAlert = new TextEditingController();
+  TextEditingController controllerSnackbar = new TextEditingController();
+
+  void _alertdialog(String str) {
+    if (str.isEmpty) return;
+    AlertDialog alertDialog = new AlertDialog(
+      content: new Text(
+        str,
+        style: new TextStyle(fontSize: 20.0),
+      ),
+      actions: <Widget>[
+        new RaisedButton(color: Colors.purple, child: new Text("OK"), onPressed: (){
+          Navigator.pop(context);
+        })
+      ],
+    );
+
+    showDialog(context: context, child: alertDialog);
   }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    this.ambilData();
+  
+  void _snackbar(String str) {
+    if (str.isEmpty) return;
+    _scaffoldState.currentState.showSnackBar(new SnackBar(
+      content: new Text(str, style: new TextStyle(fontSize: 20.0),),
+      duration: new Duration(seconds: 3),
+      ));
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldState,
       appBar: new AppBar(
-        title: new Text("List Data JSON"),
+        title: new Text("INPUT TEXT, ALERT DIALOG & SNACKBAR"),
+        backgroundColor: Colors.purple,
       ),
-      body: new ListView.builder(
-          itemCount: dataJSON == null ? 0 : dataJSON.length,
-          itemBuilder: (context, i) {
-            return new Container(
-                padding: new EdgeInsets.all(20.0),
-                child: new Card(
-                    child: new Container(
-                  padding: new EdgeInsets.all(20.0),
-                  child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      new Text(
-                        dataJSON[i]['title'],
-                        style:
-                            new TextStyle(fontSize: 20.0, color: Colors.blue),
-                      ),
-                      new Text(dataJSON[i]['body'])
-                    ],
-                  ),
-                )));
-          }),
+      body: new Container(
+        child: new Column(
+          children: <Widget>[
+            new TextField(
+              controller: controller,
+              decoration: new InputDecoration(hintText: "Tulis disini"),
+              onSubmitted: (String str) {
+                setState(() {
+                  teks = str + '\n' + teks;
+                  controller.text = "";
+                });
+              },
+            ),
+            new Text(
+              teks,
+              style: new TextStyle(fontSize: 20.0),
+            ),
+            new TextField(
+              controller: controllerAlert,
+              decoration: new InputDecoration(hintText: "ini untuk alert"),
+              onSubmitted: (String str) {
+                _alertdialog(str);
+                controllerAlert.text="";
+              },
+            ),
+            new TextField(
+              controller: controllerSnackbar,
+              decoration: new InputDecoration(hintText: "tulis untuk snackbar"),
+              onSubmitted: (String str) {
+                _snackbar(str);
+                controllerSnackbar.text="";
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
