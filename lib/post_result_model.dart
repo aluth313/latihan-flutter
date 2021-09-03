@@ -19,12 +19,16 @@ class PostResult {
   }
 
   static Future<PostResult> connectToAPI(String name, String job) async {
-    String apiURL = "https://reqres.in/api/users";
-
-    var apiResult = await http.post(apiURL, body: {
+    String apiURL = "https://reqres.in/api/users/2";
+    
+    var apiResult = await http.put(apiURL, body: {
       "name": name,
       "job": job,
     });
+    // var apiResult = await http.post(apiURL, body: {
+    //   "name": name,
+    //   "job": job,
+    // });
     var jsonObject = json.decode(apiResult.body);
 
     return PostResult.createPostResult(jsonObject);

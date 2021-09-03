@@ -28,13 +28,9 @@ class _HalHalloState extends State<HalHallo> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Text((postResult != null)
-                  ? postResult.id +
+                  ? postResult.name +
                       " | " +
-                      postResult.name +
-                      " | " +
-                      postResult.job +
-                      " | " +
-                      postResult.createdAt
+                      postResult.job
                   : "tidak ada data"),
               RaisedButton(
                 onPressed: () {
