@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 void main() {
   runApp(new MaterialApp(
-    title: "Grid dan Hero",
+    title: "Gradient, PageView, Circle Hero Animatian, MENU Dropdown",
     home: new HalHallo(),
   ));
 }
@@ -13,149 +14,123 @@ class HalHallo extends StatefulWidget {
 }
 
 class _HalHalloState extends State<HalHallo> {
-  List<Container> daftarCaleg = new List();
-  var caleg = [
-    {"nama": "Nurhadi1", "gambar": "n1.jpg"},
-    {"nama": "Nurhadi2", "gambar": "n2.jpg"},
-    {"nama": "Nurhadi3", "gambar": "n3.jpeg"},
-    {"nama": "Nurhadi4", "gambar": "n4.jpg"},
-    {"nama": "Nurhadi5", "gambar": "n5.jpg"},
-    {"nama": "Nurhadi6", "gambar": "n6.jpg"},
-    {"nama": "Nurhadi7", "gambar": "n7.jpg"},
-    {"nama": "Nurhadi8", "gambar": "n8.jpg"}
-  ];
+  final List<String> gambar = ["1.jpg", "2.jpg", "3.jpg", "4.jpg"];
 
-  _buatlist() async {
-    for (var i = 0; i < caleg.length; i++) {
-      final calegnya = caleg[i];
-      final String gambar = calegnya["gambar"];
-      daftarCaleg.add(new Container(
-          padding: new EdgeInsets.all(10.0),
-          child: new Card(
-            child: new Column(
-              children: <Widget>[
-                new Hero(
-                  tag: calegnya["nama"],
-                  child: new Material(
-                    child: new InkWell(
-                      onTap: () =>
-                          Navigator.of(context).push(new MaterialPageRoute(
-                        builder: (BuildContext context) => new Detail(
-                          nama: calegnya["nama"],
-                          gambar: gambar,
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        appBar: new AppBar(
+          title: new Text(
+              "Gradient, PageView, Circle Hero Animatian, MENU Dropdown"),
+          backgroundColor: Colors.red,
+        ),
+        body: new Container(
+          decoration: new BoxDecoration(
+              gradient: new LinearGradient(
+                  begin: FractionalOffset.topRight,
+                  end: FractionalOffset.bottomLeft,
+                  colors: [Colors.red, Colors.yellow, Colors.green])),
+          child: new PageView.builder(
+              controller: PageController(viewportFraction: 0.9),
+              itemCount: gambar.length,
+              itemBuilder: (BuildContext context, int i) {
+                return Padding(
+                  padding:
+                      new EdgeInsets.symmetric(horizontal: 5.0, vertical: 22.0),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(25.0),
+                    elevation: 10.0,
+                    child: new Stack(
+                      fit: StackFit.expand,
+                      children: <Widget>[
+                        Hero(
+                            tag: gambar[i],
+                            child: InkWell(
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          Halamandua(
+                                            gambar: gambar[i],
+                                          ))),
+                              child: new Image.asset(
+                                "img/${gambar[i]}",
+                                fit: BoxFit.cover,
+                              ),
+                            ))
+                      ],
+                    ),
+                  ),
+                );
+              }),
+        ));
+  }
+}
+
+class Halamandua extends StatefulWidget {
+  Halamandua({this.gambar});
+  final String gambar;
+
+  @override
+  _HalamanduaState createState() => _HalamanduaState();
+}
+
+class _HalamanduaState extends State<Halamandua> {
+  Color warna = Colors.grey;
+
+  void _pilihannya(Pilihan pilihan){
+    setState(() {
+      warna = pilihan.warna;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    timeDilation = 3.0;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("DOTA HERO"),
+        backgroundColor: Colors.grey,
+        actions: [
+          PopupMenuButton<Pilihan>(
+            onSelected: _pilihannya,
+            itemBuilder: (BuildContext context) {
+            return listPilihan.map((Pilihan x) {
+              return PopupMenuItem(
+                child: Text(x.teks),
+                value: x,
+              );
+            }).toList();
+          })
+        ],
+      ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                gradient: RadialGradient(center: Alignment.center, colors: [
+              Colors.blue,
+              warna,
+              Colors.black.withOpacity(0.9),
+            ])),
+          ),
+          Center(
+            child: Hero(
+                tag: widget.gambar,
+                child: ClipOval(
+                  child: SizedBox(
+                    width: 200.0,
+                    height: 200.0,
+                    child: Material(
+                      child: InkWell(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Image.asset(
+                          "img/${widget.gambar}",
+                          fit: BoxFit.cover,
                         ),
-                      )),
-                      child: new Image.asset(
-                        "img/$gambar",
-                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                ),
-                new Padding(
-                  padding: new EdgeInsets.all(10.0),
-                ),
-                new Text(
-                  calegnya["nama"],
-                  style: new TextStyle(fontSize: 20.0),
-                )
-              ],
-            ),
-          )));
-    }
-  }
-
-  @override
-  void initState() {
-    _buatlist();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Grid dan Hero"),
-        backgroundColor: Colors.red,
-      ),
-      body: new GridView.count(
-        crossAxisCount: 2,
-        children: daftarCaleg,
-      ),
-    );
-  }
-}
-
-class Detail extends StatelessWidget {
-  Detail({this.nama, this.gambar});
-  final String nama;
-  final String gambar;
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new ListView(
-        children: <Widget>[
-          new Container(
-            height: 240.0,
-            child: new Hero(
-                tag: nama,
-                child: new Material(
-                  child: new InkWell(
-                    child: new Image.asset(
-                      "img/$gambar",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
                 )),
-          ),
-          new Bagiannama(
-            nama: nama,
-          ),
-          new Bagianicon(),
-          new Keterangan(),
-        ],
-      ),
-    );
-  }
-}
-
-class Bagiannama extends StatelessWidget {
-  Bagiannama({this.nama});
-  final String nama;
-
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      padding: new EdgeInsets.all(10.0),
-      child: new Row(
-        children: <Widget>[
-          new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Text(
-                  nama,
-                  style: new TextStyle(fontSize: 20.0, color: Colors.blue),
-                ),
-                new Text(
-                  "$nama\@gmail.com",
-                  style: new TextStyle(fontSize: 17.0, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          new Row(
-            children: <Widget>[
-              new Icon(
-                Icons.star,
-                size: 30.0,
-                color: Colors.red,
-              ),
-              new Text(
-                "12",
-                style: new TextStyle(fontSize: 18.0),
-              )
-            ],
           )
         ],
       ),
@@ -163,70 +138,14 @@ class Bagiannama extends StatelessWidget {
   }
 }
 
-class Bagianicon extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      padding: new EdgeInsets.all(10.0),
-      child: new Row(
-        children: <Widget>[
-          new Iconteks(
-            icon: Icons.call,
-            teks: "Call",
-          ),
-          new Iconteks(
-            icon: Icons.message,
-            teks: "Message",
-          ),
-          new Iconteks(
-            icon: Icons.photo,
-            teks: "Photo",
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Iconteks extends StatelessWidget {
-  Iconteks({this.icon, this.teks});
-  final IconData icon;
+class Pilihan {
+  const Pilihan({this.teks, this.warna});
   final String teks;
-  @override
-  Widget build(BuildContext context) {
-    return new Expanded(
-      child: new Column(
-        children: <Widget>[
-          new Icon(
-            icon,
-            size: 50.0,
-            color: Colors.blue,
-          ),
-          new Text(
-            teks,
-            style: new TextStyle(fontSize: 10.0, color: Colors.blue),
-          )
-        ],
-      ),
-    );
-  }
+  final Color warna;
 }
 
-class Keterangan extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      padding: new EdgeInsets.all(10.0),
-      child: new Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: new Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-            style: new TextStyle(fontSize: 20.0),
-            textAlign: TextAlign.justify,
-          ),
-        ),
-      ),
-    );
-  }
-}
+List<Pilihan> listPilihan = const <Pilihan>[
+  const Pilihan(teks: "Strength", warna: Colors.red),
+  const Pilihan(teks: "Agility", warna: Colors.green),
+  const Pilihan(teks: "Intelligence", warna: Colors.blue),
+];
