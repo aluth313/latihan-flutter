@@ -19,9 +19,8 @@ class _HalHalloState extends State<HalHallo> {
   List dataJson;
   Future<String> ambilData() async {
     http.Response hasil = await http.get(
-      Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
-      headers: {"Accept": "application/json"}
-    );
+        Uri.encodeFull("http://10.0.2.2/example-app/public/api/students"),
+        headers: {"Accept": "application/json"});
 
     this.setState(() {
       dataJson = json.decode(hasil.body);
@@ -50,48 +49,38 @@ class _HalHalloState extends State<HalHallo> {
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
             ),
-            DataTable(columns: [
-              DataColumn(
-                  label: Text("ID",
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold))),
-              DataColumn(
-                  label: Text("Title",
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold))),
-              DataColumn(
-                  label: Text("Body",
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold))),
-              DataColumn(
-                  label: Text("Nyoba",
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold))),
-            ], rows: List.generate(dataJson.length, (index) {
-              return DataRow(cells: [
-                DataCell(Text(dataJson[index]['id'].toString())),
-                DataCell(Text(dataJson[index]['title'].toString())),
-                DataCell(Text(dataJson[index]['body'].toString())),
-                DataCell(Text(dataJson[index]['body'].toString())),
-              ]);
-            })
-            // [
-            //   DataRow(cells: [
-            //     DataCell(Text("1")),
-            //     DataCell(Text("Dadang")),
-            //     DataCell(Text("Dosen")),
-            //   ]),
-            //   DataRow(cells: [
-            //     DataCell(Text("2")),
-            //     DataCell(Text("Ujang")),
-            //     DataCell(Text("Staf")),
-            //   ]),
-            //   DataRow(cells: [
-            //     DataCell(Text("3")),
-            //     DataCell(Text("Jono")),
-            //     DataCell(Text("OB")),
-            //   ]),
-            // ]
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                    columns: [
+                      DataColumn(
+                          label: Text("ID",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text("Nama",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text("Kelas",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold))),
+                      DataColumn(
+                          label: Text("Kelas",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold))),
+                    ],
+                    rows: List.generate(dataJson.length, (index) {
+                      return DataRow(cells: [
+                        DataCell(Text(dataJson[index]['id'].toString())),
+                        DataCell(Text(dataJson[index]['nama'].toString())),
+                        DataCell(Text(dataJson[index]['kelas'].toString())),
+                        DataCell(Text(dataJson[index]['kelas'].toString())),
+                      ]);
+                    })),
+              ),
             )
           ],
         ),
